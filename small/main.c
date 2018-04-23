@@ -122,6 +122,8 @@ static void check(char* wd, char* input, int seconds)
 		fclose(afile);
 		fclose(cfile);
 
+                // OBS WE ADDED THIS, REMEMBER TO REMOVE IT
+                printf("%s\n", input);
 		result = fm(rows, cols, a, c);
 		if (seconds > 0) {
 			signal(SIGALRM, timeout);
