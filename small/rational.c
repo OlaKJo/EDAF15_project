@@ -14,24 +14,6 @@ rational subq(rational, rational);
 rational mulq(rational, rational);
 rational divq(rational, rational);
 
-int main(int argc, char* argv[])
-{
-
-	rational a, b;
-	a.p = 4;
-	a.q = 6;
-
-	b.p = 5;
-	b.q = 7;
-
-	print_rational(addq(a,b));
-	print_rational(subq(a,b));
-	print_rational(mulq(a,b));
-	print_rational(divq(a,b));
-
-	return 0;
-}
-
 rational mulq(rational f1, rational f2)
 {
 	rational res;
