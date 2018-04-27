@@ -60,6 +60,10 @@ void print_rational(rational r)
 
 void reduce(rational *r)
 {
+	if (r->p == 0)
+		return;
+	r->p = sign(*r) * abs(r->p);
+	r->q = abs(r->q);
 	int g;
 	while ((g = gcd(r->p, r->q)) != 1)
 	{
@@ -72,10 +76,19 @@ int sign(rational r)
 {
 	if (r.p == 0)
 		return 0;
-	if (r.p < 0 || r.q < 0)
+	if (r.p < 0 && r.q < 0)
+	{
+		return 1;
+	}
+	else if (r.p < 0)
+	{
 		return -1;
+	}
+	else if (r.q < 0)
+	{
+		return -1;
+	}
 	return 1;
-	//return (r.p / abs(r.p)) * (r.q / abs(r.q));
 }
 
 int gcd(int a, int b)
@@ -99,7 +112,7 @@ int gcd(int a, int b)
 		rem = a % b;
 	}
 
-	return b;
+	return abs(b);
 }
 
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows])
@@ -119,7 +132,8 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 		new_c[j] = rat;
 	}
 
-	return fm_rat(rows, cols, new_a, new_c);
+	bool res = fm_rat(rows, cols, new_a, new_c);
+	return res;
 }
 
 void copyRow(size_t rows, size_t cols, rational a[rows][cols], int src_pos, rational b[rows][cols], int dest_pos)
@@ -181,10 +195,16 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 		new_c[i] = divq(new_c[i], new_a[i][r - 1]);
 	}
 
+	// more variables needs to be eliminated
 	if (r > 1)
 	{
+		// step 4
+		// n2 > n1 exist negative coeffs
+
 		// goto step 6 and 7
 		int s_prim = s - n2 + n1 * (n2 - n1);
+		if (s_prim == 0)
+			return true;
 		rational a_prim[s_prim][r - 1];
 		rational c_prim[s_prim];
 		int currentRow = 0;
@@ -212,26 +232,29 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 			currentRow++;
 		}
 
-		fm_rat(s_prim, r - 1, a_prim, c_prim);
+		return fm_rat(s_prim, r - 1, a_prim, c_prim);
 	}
 	else
 	{
+
+		if ((s - n2 + n1 * (n2 - n1)) == 0)
+			return true;
 		//step 5
-		rational max = new_a[0][r - 1];
-		rational min = new_a[0][r - 1];
-		for (int i = 0; i < n1; i++)
+		rational max = new_c[n1];
+		rational min = new_c[0];
+		for (int i = 1; i < n1; i++)
 		{
-			if (compare(new_a[i][r - 1], min) == -1)
+			if (compare(new_c[i], min) == -1)
 			{
-				min = new_a[i][r - 1];
+				min = new_c[i];
 			}
 		}
 
-		for (int i = n1; i < n2; i++)
+		for (int i = n1 + 1; i < n2; i++)
 		{
-			if (compare(new_a[i][r - 1], max) == 1)
+			if (compare(new_c[i], max) == 1)
 			{
-				max = new_a[i][r - 1];
+				max = new_c[i];
 			}
 		}
 
@@ -241,17 +264,8 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 				return false;
 		}
 
-		return compare(max,min) == 1;
+		bool res = (compare(min, max) == 1);
 
-		// step 4
-		if (n2 > n1)
-		{
-		}
-
-		if (n1 > 0)
-		{
-		}
-
-		return 0;
+		return res;
 	}
 }
