@@ -1,21 +1,24 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 typedef struct
 {
-	int p;
-	int q;
+	long p;
+	long q;
 } rational;
 
 void print_rational(rational);
-int gcd(int, int);
+long gcd(long, long);
 void reduce(rational *);
 rational addq(rational, rational);
 rational subq(rational, rational);
 rational mulq(rational, rational);
 rational divq(rational, rational);
+int sign(rational r);
 bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows]);
+void print_matrix(size_t rows, size_t cols, rational a[rows][cols]);
 
 rational mulq(rational f1, rational f2)
 {
@@ -34,7 +37,11 @@ rational subq(rational f1, rational f2)
 
 rational divq(rational f1, rational f2)
 {
-	int temp = f2.p;
+	if(f2.p == 0) 
+		printf("division by zero\n");
+	if(f1.p == 0)
+		printf("division with result zero\n");
+	long temp = f2.p;
 	f2.p = f2.q;
 	f2.q = temp;
 	return mulq(f1, f2);
@@ -55,7 +62,7 @@ int compare(rational r1, rational r2)
 
 void print_rational(rational r)
 {
-	printf("%d/%d\n", r.p, r.q);
+	printf("%d/%d", r.p, r.q);
 }
 
 void reduce(rational *r)
@@ -91,10 +98,10 @@ int sign(rational r)
 	return 1;
 }
 
-int gcd(int a, int b)
+long gcd(long a, long b)
 {
-	int tmp;
-	int rem;
+	long tmp;
+	long rem;
 
 	if (a < b)
 	{
@@ -115,15 +122,28 @@ int gcd(int a, int b)
 	return abs(b);
 }
 
+void print_matrix(size_t rows, size_t cols, rational a[rows][cols])
+{
+	for(size_t i = 0; i < rows; i++)  {
+		for(size_t j = 0; j < cols; j++) {
+			print_rational(a[i][j]);
+			printf(" ");
+		}
+		printf("\n");
+	}
+	printf("\n\n");		
+}
+
+
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows])
 {
 
 	rational new_a[rows][cols];
 	rational new_c[rows];
 
-	for (int j = 0; j < rows; j++)
+	for (size_t j = 0; j < rows; j++)
 	{
-		for (int i = 0; i < cols; i++)
+		for (size_t i = 0; i < cols; i++)
 		{
 			rational rat = {.p = a[j][i], .q = 1};
 			new_a[j][i] = rat;
@@ -131,6 +151,9 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 		rational rat = {.p = c[j], .q = 1};
 		new_c[j] = rat;
 	}
+	//debugging, remove later
+	printf("The original matrix: \n");
+	print_matrix(rows, cols, new_a);
 
 	bool res = fm_rat(rows, cols, new_a, new_c);
 	return res;
@@ -138,7 +161,7 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 
 void copyRow(size_t rows, size_t cols, rational a[rows][cols], int src_pos, rational b[rows][cols], int dest_pos)
 {
-	for (int i = 0; i < cols; i++)
+	for (size_t i = 0; i < cols; i++)
 	{
 		b[dest_pos][i] = a[src_pos][i];
 	}
@@ -173,7 +196,7 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 				else
 					n2++;
 
-				printf("%i\n", new_c[currentIndex - 1]);
+				//printf("%i\n", new_c[currentIndex - 1]);
 			}
 			else if (a[j][r - 1].p == 0 && order[i] == 0)
 			{
@@ -183,6 +206,9 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 		}
 	}
 
+	//debug code, remove later
+	printf("the reordered matrix is: \n");
+	print_matrix(rows, cols, new_a);
 	n2 += n1;
 
 	// step 3
@@ -194,6 +220,10 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 		}
 		new_c[i] = divq(new_c[i], new_a[i][r - 1]);
 	}
+	
+	//debug code, remove later
+	printf("After division the matrix is: \n");
+	print_matrix(rows, cols, new_a);
 
 	// more variables needs to be eliminated
 	if (r > 1)
@@ -216,6 +246,15 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 				{
 					rational rat = {.p = -1, .q = 1};
 					a_prim[currentRow][l] = addq(mulq(new_a[j][l], rat), new_a[i][l]);
+
+					/*
+					 *print_rational(new_a[j][l]);
+					 *printf("\nand\n");
+					 *print_rational(new_a[i][l]);
+					 *printf("\ngive: \n");
+					 *print_rational(a_prim[currentRow][l]);
+					 *printf("\n\n");
+					 */
 				}
 				c_prim[currentRow] = subq(new_c[i], new_c[j]);
 				currentRow++;

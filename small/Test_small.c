@@ -55,6 +55,18 @@ void test_sign(void)
     TEST_ASSERT(sign(r3) == 0);
 }
 
+void test_div_zero(void)
+{
+    rational r1 = {.p = 2, .q = 1};
+    rational r2 = {.p = 0, .q = 1};
+
+    rational res = divq(r2, r1);
+    print_rational(res);
+
+    rational expected_res = {.p = 0, .q = 1};
+    TEST_ASSERT(res.p == expected_res.p);
+}
+
 int main(void)
 {
     UNITY_BEGIN();
@@ -62,5 +74,6 @@ int main(void)
     RUN_TEST(test_addq_2);
     RUN_TEST(test_reduce_zero);
     RUN_TEST(test_sign);
+    RUN_TEST(test_div_zero);
     return UNITY_END();
 }
