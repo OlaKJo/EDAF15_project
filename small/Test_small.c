@@ -77,7 +77,10 @@ void test_big_div(void)
 
     TEST_ASSERT(res.p == sol.p);
     TEST_ASSERT(res.q == sol.q);
-    
+}
+void test_gcd_zero(void)
+{
+    TEST_ASSERT(gcd(0, 2) == 1);
 }
 int main(void)
 {
