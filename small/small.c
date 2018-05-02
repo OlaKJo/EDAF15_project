@@ -18,7 +18,8 @@ rational mulq(rational, rational);
 rational divq(rational, rational);
 int sign(rational r);
 bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows]);
-void print_matrix(size_t rows, size_t cols, rational a[rows][cols]);
+void print_matrix(size_t rows, size_t cols, rational a[rows][cols], rational c[rows]);
+long abs_long(long l);
 
 rational mulq(rational f1, rational f2)
 {
@@ -69,14 +70,21 @@ void reduce(rational *r)
 {
 	if (r->p == 0)
 		return;
-	r->p = sign(*r) * abs(r->p);
-	r->q = abs(r->q);
+	r->p = sign(*r) * abs_long(r->p);
+	r->q = abs_long(r->q);
 	int g;
 	while ((g = gcd(r->p, r->q)) != 1)
 	{
 		r->p /= g;
 		r->q /= g;
 	}
+}
+
+long abs_long(long l)
+{
+	if (l < 0) 
+		return l * (-1);
+	return l;
 }
 
 int sign(rational r)
@@ -119,16 +127,18 @@ long gcd(long a, long b)
 		rem = a % b;
 	}
 
-	return abs(b);
+	return abs_long(b);
 }
 
-void print_matrix(size_t rows, size_t cols, rational a[rows][cols])
+void print_matrix(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 {
 	for(size_t i = 0; i < rows; i++)  {
 		for(size_t j = 0; j < cols; j++) {
 			print_rational(a[i][j]);
 			printf(" ");
 		}
+		printf("       ");
+		print_rational(c[i]);
 		printf("\n");
 	}
 	printf("\n\n");		
@@ -153,7 +163,7 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 	}
 	//debugging, remove later
 	printf("The original matrix: \n");
-	print_matrix(rows, cols, new_a);
+	print_matrix(rows, cols, new_a, new_c);
 
 	bool res = fm_rat(rows, cols, new_a, new_c);
 	return res;
@@ -208,7 +218,7 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 
 	//debug code, remove later
 	printf("the reordered matrix is: \n");
-	print_matrix(rows, cols, new_a);
+	print_matrix(rows, cols, new_a, new_c);
 	n2 += n1;
 
 	// step 3
@@ -223,7 +233,7 @@ bool fm_rat(size_t rows, size_t cols, rational a[rows][cols], rational c[rows])
 	
 	//debug code, remove later
 	printf("After division the matrix is: \n");
-	print_matrix(rows, cols, new_a);
+	print_matrix(rows, cols, new_a, new_c);
 
 	// more variables needs to be eliminated
 	if (r > 1)

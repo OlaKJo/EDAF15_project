@@ -67,6 +67,18 @@ void test_div_zero(void)
     TEST_ASSERT(res.p == expected_res.p);
 }
 
+void test_big_div(void)
+{
+    rational r1 = {.p = 343548, .q = 46297};
+    rational r2 = {.p = -102708, .q = 601861};
+    rational sol = {.p = -41353, .q = 951};
+
+    rational res = divq(r1, r2);
+
+    TEST_ASSERT(res.p == sol.p);
+    TEST_ASSERT(res.q == sol.q);
+    
+}
 int main(void)
 {
     UNITY_BEGIN();
@@ -75,5 +87,6 @@ int main(void)
     RUN_TEST(test_reduce_zero);
     RUN_TEST(test_sign);
     RUN_TEST(test_div_zero);
+    RUN_TEST(test_big_div);
     return UNITY_END();
 }

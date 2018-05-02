@@ -124,6 +124,9 @@ static void check(char* wd, char* input, int seconds)
 
                 // OBS WE ADDED THIS, REMEMBER TO REMOVE IT
                 printf("%s\n", input);
+				if (strcmp("A3.95", input) == 0) {
+					printf("%s\n", input);
+				}
 		result = fm(rows, cols, a, c);
 		if (seconds > 0) {
 			signal(SIGALRM, timeout);
