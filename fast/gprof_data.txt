@@ -1,0 +1,279 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 79.13      5.46     5.46 42260454     0.00     0.00  gcd
+  6.96      5.94     0.48 33002888     0.00     0.00  reduce
+  4.49      6.25     0.31  1068984     0.00     0.00  fm_rat
+  2.32      6.41     0.16 57482965     0.00     0.00  new_rational
+  1.59      6.52     0.11 23078636     0.00     0.00  mulq
+  1.45      6.62     0.10                             __writev_nocancel
+  1.16      6.70     0.08  3555451     0.00     0.00  swap_rows
+  0.58      6.74     0.04  9924252     0.00     0.00  addq
+  0.58      6.78     0.04  1068984     0.00     0.00  fm
+  0.43      6.81     0.03  8095561     0.00     0.00  sign
+  0.43      6.84     0.03  2225953     0.00     0.00  group_sort
+  0.29      6.86     0.02 13154384     0.00     0.00  divq
+  0.29      6.88     0.02                             frame_dummy
+  0.14      6.89     0.01  1012658     0.00     0.00  compare
+  0.14      6.90     0.01                             __profile_frequency
+  0.00      6.90     0.00      310     0.00     0.02  check
+  0.00      6.90     0.00        9     0.00     0.00  timeout
+  0.00      6.90     0.00        5     0.00     0.00  cd
+  0.00      6.90     0.00        1     0.00     0.22  eval
+  0.00      6.90     0.00        1     0.00     6.77  main
+  0.00      6.90     0.00        1     0.00     0.00  read_ref
+  0.00      6.90     0.00        1     0.00     6.55  search
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.14% of 6.90 seconds
+
+index % time    self  children    called     name
+                0.04    6.73 1068984/1068984     check [2]
+[1]     98.1    0.04    6.73 1068984         fm [1]
+                0.31    6.39 1068984/1068984     fm_rat [5]
+                0.03    0.00 11325693/57482965     new_rational [14]
+-----------------------------------------------
+                0.00    0.22      10/310         eval [13]
+                0.00    6.55     300/310         search [6]
+[2]     98.1    0.00    6.77     310         check [2]
+                0.04    6.73 1068984/1068984     fm [1]
+-----------------------------------------------
+                0.00    6.77       1/1           generic_start_main [4]
+[3]     98.1    0.00    6.77       1         main [3]
+                0.00    6.55       1/1           search [6]
+                0.00    0.22       1/1           eval [13]
+                0.00    0.00       2/5           cd [22]
+                0.00    0.00       1/1           read_ref [23]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     98.1    0.00    6.77                 generic_start_main [4]
+                0.00    6.77       1/1           main [3]
+-----------------------------------------------
+                             1156969             fm_rat [5]
+                0.31    6.39 1068984/1068984     fm [1]
+[5]     97.1    0.31    6.39 1068984+1156969 fm_rat [5]
+                0.02    2.50 13154384/13154384     divq [10]
+                0.04    1.63 8911594/23078636     mulq [9]
+                0.04    1.63 8911594/9924252     addq [11]
+                0.01    0.38 1012658/1012658     compare [12]
+                0.03    0.11 2225953/2225953     group_sort [15]
+                             1156969             fm_rat [5]
+-----------------------------------------------
+                0.00    6.55       1/1           main [3]
+[6]     95.0    0.00    6.55       1         search [6]
+                0.00    6.55     300/310         check [2]
+                0.00    0.00       1/5           cd [22]
+-----------------------------------------------
+                0.14    1.64 9924252/33002888     addq [11]
+                0.34    3.82 23078636/33002888     mulq [9]
+[7]     86.1    0.48    5.46 33002888         reduce [7]
+                5.46    0.00 42260454/42260454     gcd [8]
+-----------------------------------------------
+                             31193312             gcd [8]
+                5.46    0.00 42260454/42260454     reduce [7]
+[8]     79.1    5.46    0.00 42260454+31193312 gcd [8]
+                             31193312             gcd [8]
+-----------------------------------------------
+                0.00    0.19 1012658/23078636     compare [12]
+                0.04    1.63 8911594/23078636     fm_rat [5]
+                0.06    2.40 13154384/23078636     divq [10]
+[9]     62.7    0.11    4.22 23078636         mulq [9]
+                0.34    3.82 23078636/33002888     reduce [7]
+                0.06    0.00 23078636/57482965     new_rational [14]
+-----------------------------------------------
+                0.02    2.50 13154384/13154384     fm_rat [5]
+[10]    36.6    0.02    2.50 13154384         divq [10]
+                0.06    2.40 13154384/23078636     mulq [9]
+                0.04    0.00 13154384/57482965     new_rational [14]
+-----------------------------------------------
+                0.00    0.19 1012658/9924252     compare [12]
+                0.04    1.63 8911594/9924252     fm_rat [5]
+[11]    26.9    0.04    1.81 9924252         addq [11]
+                0.14    1.64 9924252/33002888     reduce [7]
+                0.03    0.00 9924252/57482965     new_rational [14]
+-----------------------------------------------
+                0.01    0.38 1012658/1012658     fm_rat [5]
+[12]     5.7    0.01    0.38 1012658         compare [12]
+                0.00    0.19 1012658/23078636     mulq [9]
+                0.00    0.19 1012658/9924252     addq [11]
+                0.00    0.00 1012658/8095561     sign [18]
+-----------------------------------------------
+                0.00    0.22       1/1           main [3]
+[13]     3.2    0.00    0.22       1         eval [13]
+                0.00    0.22      10/310         check [2]
+                0.00    0.00       2/5           cd [22]
+-----------------------------------------------
+                0.03    0.00 9924252/57482965     addq [11]
+                0.03    0.00 11325693/57482965     fm [1]
+                0.04    0.00 13154384/57482965     divq [10]
+                0.06    0.00 23078636/57482965     mulq [9]
+[14]     2.3    0.16    0.00 57482965         new_rational [14]
+-----------------------------------------------
+                0.03    0.11 2225953/2225953     fm_rat [5]
+[15]     2.0    0.03    0.11 2225953         group_sort [15]
+                0.08    0.00 3555451/3555451     swap_rows [17]
+                0.03    0.00 7082903/8095561     sign [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     1.4    0.10    0.00                 __writev_nocancel [16]
+-----------------------------------------------
+                0.08    0.00 3555451/3555451     group_sort [15]
+[17]     1.2    0.08    0.00 3555451         swap_rows [17]
+-----------------------------------------------
+                0.00    0.00 1012658/8095561     compare [12]
+                0.03    0.00 7082903/8095561     group_sort [15]
+[18]     0.4    0.03    0.00 8095561         sign [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[19]     0.3    0.02    0.00                 frame_dummy [19]
+-----------------------------------------------
+                                                 <spontaneous>
+[20]     0.1    0.01    0.00                 __profile_frequency [20]
+-----------------------------------------------
+                0.00    0.00       9/9           __restore_rt [737]
+[21]     0.0    0.00    0.00       9         timeout [21]
+-----------------------------------------------
+                0.00    0.00       1/5           search [6]
+                0.00    0.00       2/5           eval [13]
+                0.00    0.00       2/5           main [3]
+[22]     0.0    0.00    0.00       5         cd [22]
+-----------------------------------------------
+                0.00    0.00       1/1           main [3]
+[23]     0.0    0.00    0.00       1         read_ref [23]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [20] __profile_frequency     [1] fm                     [23] read_ref (main.c)
+  [16] __writev_nocancel       [5] fm_rat                  [7] reduce
+  [11] addq                   [19] frame_dummy             [6] search (main.c)
+  [22] cd                      [8] gcd                    [18] sign
+   [2] check (main.c)         [15] group_sort             [17] swap_rows
+  [12] compare                 [3] main                   [21] timeout (main.c)
+  [10] divq                    [9] mulq
+  [13] eval (main.c)          [14] new_rational
