@@ -1,0 +1,6 @@
+1. precalculate GCD for a bunch of numbers
+2. save all calculations of gcd to a map structure so that we never calculate the same gcd more than once
+3. same idea for reduce
+4. Only perform reduce when a number is of sufficient size
+
+
