@@ -1,0 +1,384 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <ctype.h>
+        -:    2:#include <errno.h>
+        -:    3:#include <inttypes.h>
+        -:    4:#include <math.h>
+        -:    5:#include <signal.h>
+        -:    6:#include <stdbool.h>
+        -:    7:#include <stdint.h>
+        -:    8:#include <stdio.h>
+        -:    9:#include <string.h>
+        -:   10:#include <stdlib.h>
+        -:   11:#include <dirent.h>
+        -:   12:#include <fcntl.h>
+        -:   13:#include <unistd.h>
+        -:   14:
+        -:   15:#include "error.h"
+        -:   16:
+        -:   17:#define N	(10)			/* number of tests. */
+        -:   18:
+        -:   19:char*		progname;		/* name of this program. */
+        -:   20:unsigned	test_time = 1;		/* default one second for fast. */
+        -:   21:volatile bool	proceed;		/* stop after test_time seconds. */
+        -:   22:uint64_t	ref[N];			/* reference counts by /opt/fm/bin/fast */
+        -:   23:double		ratio[N];		/* (your count) / (ref count) */
+        -:   24:bool		generate_ref;		/* used when new ref file should be made. */
+        -:   25:size_t		input_count;		/* counts number of input files tested. will end at N above. */
+        -:   26:
+        -:   27:bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[cols]);
+        -:   28:
+       10:   29:static void timeout(int s)
+        -:   30:{
+       10:   31:	proceed = s-s; /* set proceed to false and use s so that gcc does not warn about unused s. */
+       10:   32:}
+        -:   33:
+    #####:   34:static void ctrl_c(int s)
+        -:   35:{
+    #####:   36:	printf("\n\npassed %zu tests (no failures)\n", input_count);
+    #####:   37:	exit(0);
+        -:   38:}
+        -:   39:
+        5:   40:void cd(char* dir)
+        -:   41:{
+        5:   42:	if (chdir(dir) < 0)
+    #####:   43:		error("cd to \"%s\" failed", dir);
+        5:   44:}
+        -:   45:
+      310:   46:static void check(char* wd, char* input, int seconds)
+        -:   47:{
+        -:   48:	bool		result;
+        -:   49:	bool		differ;
+        -:   50:	int		n;
+        -:   51:	int		x;
+        -:   52:	size_t		index;		/* with input Ax.y index is y, e.g. 123 in A4.123 */
+        -:   53:	size_t		rows;
+        -:   54:	size_t		rows0;
+        -:   55:	size_t		cols;
+        -:   56:	size_t		i;
+        -:   57:	size_t		j;
+        -:   58:	char*		s;
+        -:   59:	char		c[100];
+        -:   60:	char		output[100];
+        -:   61:	FILE*		afile;
+        -:   62:	FILE*		cfile;
+        -:   63:	FILE*		ofile;
+        -:   64:	uint64_t	count;
+        -:   65:
+      310:   66:	index = 0;
+      310:   67:	count = 0;
+      310:   68:	errno = 0;
+      310:   69:	cols = strtol(input+1, &s, 10);
+      310:   70:	if (errno != 0)
+    #####:   71:		error("strtol failed for %s", input+1);
+        -:   72:
+      310:   73:	s = strchr(input, '.');
+      310:   74:	if (s != NULL) {
+      310:   75:		s += 1;
+      310:   76:		n = sscanf(s, "%zu", &index);
+      310:   77:		if (n != 1)
+    #####:   78:			error("reading system number failed in %s, n = %d", s, n);
+        -:   79:	}
+        -:   80:
+      310:   81:	strncpy(c, input, sizeof c);
+      310:   82:	c[0] = 'c';
+        -:   83:
+      310:   84:	afile = fopen(input, "r");
+      310:   85:	if (afile == NULL)
+    #####:   86:		error("fopen %s failed", input);
+      310:   87:	cfile = fopen(c, "r");
+      310:   88:	if (cfile == NULL) {
+    #####:   89:		fclose(afile);
+    #####:   90:		return;
+        -:   91:	}
+        -:   92:
+      310:   93:	n = fscanf(afile, "%zu %zu", &rows, &cols);
+      310:   94:	if (n != 2)
+    #####:   95:		error("reading matrix size failed");
+        -:   96:
+      310:   97:	{
+      310:   98:		signed char	a[rows][cols];
+      310:   99:		signed char	c[rows];
+        -:  100:
+      310:  101:		memset(a, 0, sizeof a);
+      310:  102:		memset(c, 0, sizeof c);
+        -:  103:
+     2004:  104:		for (i = 0; i < rows; ++i) {
+     5217:  105:			for (j = 0; j < cols; ++j) {
+     3523:  106:				n = fscanf(afile, "%d", &x);
+     3523:  107:				if (n != 1)
+    #####:  108:					error("reading a[%zu][%zu] of %s/%s failed", i, j, wd, a);
+     3523:  109:				a[i][j] = x;
+        -:  110:			}
+        -:  111:		}
+        -:  112:
+      310:  113:		n = fscanf(cfile, "%zu", &rows0);
+      310:  114:		if (n != 1)
+    #####:  115:			error("reading vector size of %s/%s failed", wd, c);
+        -:  116:		
+     2004:  117:		for (i = 0; i < rows; ++i) {
+     1694:  118:			fscanf(cfile, "%d", &x);
+     1694:  119:			c[i] = x;
+        -:  120:		}
+        -:  121:
+      310:  122:		fclose(afile);
+      310:  123:		fclose(cfile);
+        -:  124:
+      310:  125:		result = fm(rows, cols, a, c);
+      310:  126:		if (seconds > 0) {
+       10:  127:			signal(SIGALRM, timeout);
+       10:  128:			alarm(seconds);
+       10:  129:			proceed = 1;
+  2642116:  130:			while (proceed) {
+  2642096:  131:				if (result != fm(rows, cols, a, c))
+    #####:  132:					error("inconsistent return value from fm after %llu iterations", count);
+  2642096:  133:				count += 1;
+        -:  134:			}
+        -:  135:
+       10:  136:			if (generate_ref) {
+    #####:  137:				ref[index] = count;
+        -:  138:
+    #####:  139:				if (input_count == 0)
+    #####:  140:					printf("%12s %12s\n", "input", "ref");
+    #####:  141:				printf("%12s %12llu\n", input, ref[index]);
+        -:  142:			}
+        -:  143:		}
+        -:  144:	}
+        -:  145:
+      310:  146:	snprintf(output, sizeof output, "output%zu.%zu.txt", cols, index);
+        -:  147:
+      310:  148:	if (access(output, R_OK) != 0) {
+        -:  149:		/* this happens when mathematica timed out. */
+    #####:  150:		unlink(input);
+    #####:  151:		unlink(c);
+    #####:  152:		return;
+        -:  153:	}
+        -:  154:
+      310:  155:	ofile = fopen(output, "r");
+      310:  156:	if (ofile == NULL)
+    #####:  157:		error("fopen %s/%s failed", wd, output);
+      310:  158:	fgets(output, sizeof output, ofile);
+      310:  159:	fclose(ofile);
+      310:  160:	differ = (strncmp(output, "False", 5) != 0) ^ result;
+      310:  161:	if (differ)
+    #####:  162:		error("failed for %s/%s", wd, input);
+        -:  163:
+      310:  164:	if (seconds > 0 && !generate_ref) {
+       10:  165:		ratio[index] = count / (double)ref[index];
+       10:  166:		if (input_count == 0)
+        1:  167:			printf("%12s %12s %12s %12s\n", "input", "ref", "count", "ratio");
+       10:  168:		printf("%12s %12llu %12llu %12.3lf\n", input, ref[index], count, ratio[index]);
+        -:  169:	}
+        -:  170:
+      310:  171:	input_count += 1;
+        -:  172:}
+        -:  173:
+        1:  174:static void search(void)
+        -:  175:{
+        -:  176:	DIR*		dir;
+        -:  177:	struct dirent*	entry;
+        -:  178:	char		wd[BUFSIZ];
+        -:  179:
+        1:  180:	dir = opendir(".");
+        -:  181:
+        1:  182:	if (dir == NULL)
+    #####:  183:		error("cannot open .");
+        -:  184:
+      904:  185:	while ((entry = readdir(dir)) != NULL) {
+        -:  186:
+      902:  187:		if (getcwd(wd, sizeof wd) == NULL)
+    #####:  188:			error("getcwd failed");
+      902:  189:		if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+        2:  190:			continue;
+      900:  191:		else if (entry->d_name[0] == 'A')
+      300:  192:			check(wd, entry->d_name, 0);
+      600:  193:		else if (isdigit(entry->d_name[0])) {
+    #####:  194:			if (chdir(entry->d_name) < 0)
+    #####:  195:				error("cd to \"%s\"", entry->d_name);	
+        -:  196:			else
+    #####:  197:				search();
+        -:  198:		}
+        -:  199:	}
+        -:  200:
+        1:  201:	cd("..");
+        -:  202:
+        1:  203:	closedir(dir);
+        1:  204:}
+        -:  205:
+        1:  206:static void eval(unsigned seconds, size_t cols)
+        -:  207:{
+        -:  208:	size_t		i;
+        -:  209:	char		input[100];
+        -:  210:	char		wd[BUFSIZ];
+        -:  211:
+        1:  212:	cd("eval");
+        -:  213:
+        1:  214:	if (getcwd(wd, sizeof wd) == NULL)
+    #####:  215:		error("getcwd failed");
+        -:  216:
+       11:  217:	for (i = 0; i < N; i += 1) {
+       10:  218:		snprintf(input, sizeof input, "A%zu.%zu", cols, i);	
+       10:  219:		if (access(input, R_OK) != 0)
+    #####:  220:			error("cannot read file \"%s/\"%s", wd, input);
+       10:  221:		check(wd, input, seconds);
+        -:  222:	}
+        -:  223:
+        1:  224:	cd("..");
+        1:  225:}
+        -:  226:
+        1:  227:static void read_ref()
+        -:  228:{
+        -:  229:	int		i;
+        -:  230:	FILE*		fp;
+        -:  231:	char		filename[100];
+        -:  232:	char		cmd[100];
+        -:  233:
+        1:  234:	if (generate_ref)	
+    #####:  235:		return;
+        -:  236:
+        1:  237:	snprintf(filename, sizeof filename, "ref.%u", test_time);
+        -:  238:
+        1:  239:	fp = fopen(filename, "r");
+        -:  240:
+        1:  241:	if (fp == NULL) {
+    #####:  242:		printf("no reference counts available for test_time = %u\n", test_time);
+    #####:  243:		printf("runnning the reference implementation to create them...\n");
+    #####:  244:		snprintf(cmd, sizeof cmd, "/opt/fm/bin/fm -g -t %u", test_time);
+    #####:  245:		system(cmd);
+    #####:  246:		fp = fopen(filename, "r");
+    #####:  247:		if (fp == NULL)
+    #####:  248:			error("could not produce reference counts for test_time = %u", test_time);
+        -:  249:	}
+        -:  250:
+       11:  251:	for (i = 0; i < N; i += 1)
+       10:  252:		fscanf(fp, "%llu\n", &ref[i]);
+        1:  253:	fclose(fp);
+        1:  254:	printf("will use reference count file \"%s\"\n", filename);
+        -:  255:}
+        -:  256:
+    #####:  257:static void save_ref()
+        -:  258:{
+        -:  259:	int		i;
+        -:  260:	FILE*		fp;
+        -:  261:	char		filename[100];
+        -:  262:	char		cwd[100];
+        -:  263:
+    #####:  264:	snprintf(filename, sizeof filename, "ref.%u", test_time);
+        -:  265:
+    #####:  266:	fp = fopen(filename, "w");
+    #####:  267:	if (fp == NULL)
+    #####:  268:		error("cannot open \"%s\" for writing", filename);
+        -:  269:
+    #####:  270:	if (getcwd(cwd, sizeof cwd) == NULL)
+    #####:  271:		error("getcwd failed");
+        -:  272:
+    #####:  273:	printf("saving reference counts in %s/%s\n", cwd, filename);
+        -:  274:
+    #####:  275:	for (i = 0; i < N; i += 1)
+    #####:  276:		fprintf(fp, "%llu\n", ref[i]);
+    #####:  277:	fclose(fp);
+    #####:  278:}
+        -:  279:
+    #####:  280:static void usage(char* arg)
+        -:  281:{
+    #####:  282:	if (arg != NULL)
+    #####:  283:		fprintf(stderr, "%s: illegal option: %s\n", progname, arg);
+    #####:  284:	fprintf(stderr, "%s: usage: %s [-h] [-i inputdir] [-t time]\n", progname, progname);
+    #####:  285:	fprintf(stderr, "%s: where time is in seconds and >= 0\n", progname);
+    #####:  286:	fprintf(stderr, "%s: by default \"input\" in current directory is used\n", progname);
+    #####:  287:	fprintf(stderr, "%s: with -i inputdir fm recursively searches for all input files in that directory\n", progname);
+    #####:  288:	fprintf(stderr, "%s: to try a really huge number of tests (for weeks), use fm -i /opt/fm/input\n", progname);
+    #####:  289:	fprintf(stderr, "%s: or more reasonable, fm -i /opt/fm/input/0/0\n", progname);
+    #####:  290:	fprintf(stderr, "%s: timing tests are still performed using \"eval\" in the current directory\n", progname);
+    #####:  291:	exit(1);
+        -:  292:}
+        -:  293:
+        1:  294:int main(int argc, char** argv)
+        -:  295:{
+        -:  296:	int		i;
+        -:  297:	double		prod;
+        -:  298:	char		cwd[BUFSIZ];
+        -:  299:	char*		input;
+        -:  300:	FILE*		fp;
+        -:  301:
+        1:  302:	progname	= argv[0];
+        1:  303:	input		= "input";
+        -:  304:
+        1:  305:	signal(SIGINT, ctrl_c);
+        -:  306:
+        1:  307:	if (getcwd(cwd, sizeof cwd) == NULL)
+    #####:  308:		error("getcwd failed");
+        -:  309:
+        1:  310:	for (i = 1; i < argc; i += 1) {
+    #####:  311:		if (argv[i][0] != '-')
+    #####:  312:			usage(argv[i]);
+        -:  313:		else {
+    #####:  314:			switch (argv[i][1]) {
+        -:  315:			case 'g':
+        -:  316:				/* only used by fm itself. */
+    #####:  317:				generate_ref = 1;
+    #####:  318:				break;
+        -:  319:
+        -:  320:			case 'h':
+    #####:  321:				usage(NULL);
+        -:  322:
+        -:  323:			case 'i':
+    #####:  324:				if (argv[i+1] == NULL)
+    #####:  325:					usage(argv[i]);
+    #####:  326:				input = argv[i+1];
+    #####:  327:				i += 1;
+    #####:  328:				break;
+        -:  329:
+        -:  330:			case 't':
+    #####:  331:				if (argv[i+1] == NULL || sscanf(argv[i+1],  "%u", &test_time) != 1)
+    #####:  332:					usage(argv[i]);
+    #####:  333:				i += 1;
+    #####:  334:				break;
+        -:  335:
+        -:  336:			default:
+    #####:  337:				usage(argv[i]);
+        -:  338:			}
+        -:  339:		}
+        -:  340:	}
+        -:  341:					
+        1:  342:	if (!generate_ref)
+        1:  343:		printf("welcome to the fourier-motzkin test program. use fm -h for help\n\n");
+        -:  344:
+        1:  345:	if (test_time > 0)
+        1:  346:		read_ref();
+        -:  347:
+        1:  348:	cd(input);
+        1:  349:	input_count = 0;
+        1:  350:	search();
+        1:  351:	printf("passed %zu tests (no failures)\n", input_count);
+        1:  352:	cd(cwd);
+        -:  353:
+        1:  354:	if (test_time == 0)
+    #####:  355:		exit(0);
+        -:  356:
+        1:  357:	input_count = 0;
+        1:  358:	printf("now timing %d tests...please wait %u s\n", N, N*test_time);
+        1:  359:	eval(test_time, 3);
+        1:  360:	if (input_count != N)
+    #####:  361:		error("expected input_count = %d\n", N);
+        -:  362:	
+        1:  363:	if (ratio[0] == 0) 
+    #####:  364:		save_ref();
+        -:  365:	else {
+        1:  366:		prod = 1.0;
+       11:  367:		for (i = 0; i < N; i += 1)
+       10:  368:			prod *= ratio[i];
+        1:  369:		prod = pow(prod, 1.0/N);
+        1:  370:		printf("geometric mean of ratios = %1.2lf (higher is better)\n", prod);
+        1:  371:		fp = fopen("score", "w");
+        1:  372:		if (fp == NULL)	
+    #####:  373:			error("cannot open \"score\" for writing");
+        1:  374:		fprintf(fp, "%1.0lf\n", prod * 100); /* print as integer. */
+        1:  375:		fclose(fp);
+        -:  376:	}
+        -:  377:
+        1:  378:	return 0;
+        -:  379:}

@@ -1,0 +1,249 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  us/call  us/call  name    
+ 36.51      3.66     3.66 129053503     0.03     0.04  reduce
+ 31.57      6.82     3.16                             __mbsrtowcs_l
+ 14.34      8.25     1.44 60303293     0.02     0.02  gcd
+  6.09      8.86     0.61                             intel_check_word
+  2.70      9.13     0.27  1507213     0.18     2.22  fm_rat
+  1.90      9.32     0.19 32932924     0.01     0.08  addq
+  1.60      9.48     0.16                             compute_change
+  1.20      9.60     0.12                             group_sort
+  1.00      9.70     0.10                             compute_offset
+  0.80      9.78     0.08 14158942     0.01     0.01  new_rational
+  0.80      9.86     0.08  3146573     0.03     0.42  compare
+  0.60      9.92     0.06 30254731     0.00     0.12  mulq
+  0.30      9.95     0.03  5076539     0.01     0.01  divq
+  0.30      9.98     0.03  3146573     0.01     0.02  swap_rows
+  0.20     10.00     0.02                             sign
+  0.10     10.01     0.01                             time
+  0.00     10.01     0.00      323     0.00     0.00  fm
+  0.00     10.01     0.00        1     0.00     0.00  check
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.10% of 10.01 seconds
+
+index % time    self  children    called     name
+                0.46    0.18 16095789/129053503     fm_rat [3]
+                1.46    0.57 51706906/129053503     mulq [2]
+                1.73    0.68 61250808/129053503     addq [6]
+[1]     50.8    3.66    1.44 129053503         reduce [1]
+                1.44    0.00 60303293/60303293     gcd [8]
+-----------------------------------------------
+                             1383248             mulq [2]
+                0.02    1.15 9521966/30254731     group_sort [7]
+                0.02    1.22 10097501/30254731     compare [9]
+                0.02    1.28 10635264/30254731     fm_rat [3]
+[2]     37.0    0.06    3.64 30254731+1383248 mulq [2]
+                1.46    0.57 51706906/129053503     reduce [1]
+                0.12    1.48 20157230/32932924     addq [6]
+                0.01    0.00 1383248/14158942     new_rational [13]
+                             1383248             mulq [2]
+-----------------------------------------------
+                0.00    0.00     310/1507213     __check_realloc [18]
+                0.27    3.08 1506903/1507213     _GLOBAL__sub_I_65535_0___check_malloc [4]
+[3]     33.5    0.27    3.08 1507213         fm_rat [3]
+                0.02    1.28 10635264/30254731     mulq [2]
+                0.07    0.94 12775694/32932924     addq [6]
+                0.46    0.18 16095789/129053503     reduce [1]
+                0.07    0.00 12775694/14158942     new_rational [13]
+                0.03    0.03 3146573/3146573     swap_rows [14]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     33.5    0.00    3.35                 _GLOBAL__sub_I_65535_0___check_malloc [4]
+                0.27    3.08 1506903/1507213     fm_rat [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[5]     31.6    3.16    0.00                 __mbsrtowcs_l [5]
+-----------------------------------------------
+                0.07    0.94 12775694/32932924     fm_rat [3]
+                0.12    1.48 20157230/32932924     mulq [2]
+[6]     26.0    0.19    2.42 32932924         addq [6]
+                1.73    0.68 61250808/129053503     reduce [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]     26.0    0.12    2.48                 group_sort [7]
+                0.08    1.24 3146573/3146573     compare [9]
+                0.02    1.15 9521966/30254731     mulq [2]
+-----------------------------------------------
+                1.44    0.00 60303293/60303293     reduce [1]
+[8]     14.3    1.44    0.00 60303293         gcd [8]
+-----------------------------------------------
+                0.08    1.24 3146573/3146573     group_sort [7]
+[9]     13.1    0.08    1.24 3146573         compare [9]
+                0.02    1.22 10097501/30254731     mulq [2]
+-----------------------------------------------
+                                                 <spontaneous>
+[10]     6.1    0.61    0.00                 intel_check_word [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     1.6    0.16    0.00                 compute_change [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     1.0    0.10    0.00                 compute_offset [12]
+-----------------------------------------------
+                0.01    0.00 1383248/14158942     mulq [2]
+                0.07    0.00 12775694/14158942     fm_rat [3]
+[13]     0.8    0.08    0.00 14158942         new_rational [13]
+-----------------------------------------------
+                0.03    0.03 3146573/3146573     fm_rat [3]
+[14]     0.6    0.03    0.03 3146573         swap_rows [14]
+                0.03    0.00 5076539/5076539     divq [15]
+-----------------------------------------------
+                0.03    0.00 5076539/5076539     swap_rows [14]
+[15]     0.3    0.03    0.00 5076539         divq [15]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     0.2    0.02    0.00                 sign [16]
+-----------------------------------------------
+                                                 <spontaneous>
+[17]     0.1    0.01    0.00                 time [17]
+-----------------------------------------------
+                                                 <spontaneous>
+[18]     0.0    0.00    0.00                 __check_realloc [18]
+                0.00    0.00     310/1507213     fm_rat [3]
+-----------------------------------------------
+                0.00    0.00       8/323         __gconv_transform_utf8_internal [625]
+                0.00    0.00     315/323         check [20]
+[19]     0.0    0.00    0.00     323         fm [19]
+-----------------------------------------------
+                                   3             check [20]
+                0.00    0.00       1/1           __add_avx [536]
+[20]     0.0    0.00    0.00       1+3       check [20]
+                0.00    0.00     315/323         fm [19]
+                                   3             check [20]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [5] __mbsrtowcs_l          [15] divq                    [2] mulq
+   [6] addq                   [19] fm                     [13] new_rational
+  [20] check (main.c)          [3] fm_rat                  [1] reduce
+   [9] compare                 [8] gcd                    [16] sign
+  [11] compute_change          [7] group_sort             [14] swap_rows
+  [12] compute_offset         [10] intel_check_word       [17] time

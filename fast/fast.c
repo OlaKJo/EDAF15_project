@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -9,10 +10,6 @@ typedef struct
 long gcd(unsigned long u, unsigned long v)
 {
 	int shift;
-	if (u == 0)
-		return v;
-	if (v == 0)
-		return u;
 	shift = __builtin_ctz(u | v);
 	u >>= __builtin_ctz(u);
 	do
@@ -31,6 +28,12 @@ long gcd(unsigned long u, unsigned long v)
 
 rational reduce(rational r)
 {
+	long lim = 600000;
+	if (labs(r.p) < lim && labs(r.q) < lim)
+	{
+		return r;
+	}
+
 	int g;
 	if (r.p == 0)
 		return r;
@@ -49,17 +52,22 @@ rational new_rational(long p, long q)
 
 rational addq(rational f1, rational f2)
 {
-	return reduce(new_rational(f1.p * f2.q + f2.p * f1.q, f1.q * f2.q));
+	//return reduce(new_rational(f1.p * f2.q + f2.p * f1.q, f1.q * f2.q));
+	return new_rational(f1.p * f2.q + f2.p * f1.q, f1.q * f2.q);
 }
 
 rational mulq(rational f1, rational f2)
 {
+	//rational r1 = reduce(new_rational(f1.p, f2.q));
+	//rational r2 = reduce(new_rational(f2.p, f1.q));
+	//return new_rational(r1.p * r2.p, r1.q * r2.q);
 	return reduce(new_rational(f1.p * f2.p, f1.q * f2.q));
 }
 
 rational divq(rational f1, rational f2)
 {
-	return mulq(f1, new_rational(f2.q, f2.p));
+	//return mulq(f1, new_rational(f2.q, f2.p));
+	return reduce(new_rational(f1.p * f2.q, f1.q * f2.p));
 }
 
 signed char sign(rational r)
@@ -69,8 +77,8 @@ signed char sign(rational r)
 
 int compare(rational r1, rational r2)
 {
-	rational rat = {.p = -1, .q = 1};
-	return sign(addq(r1, mulq(r2, rat)));
+	r2.p = -r2.p;
+	return sign(addq(r1, r2));
 }
 
 void swap_rows(size_t rows, size_t cols, rational a[rows][cols], int index1, int index2)

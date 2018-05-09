@@ -1,0 +1,298 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ns/call  ns/call  name    
+ 31.17      3.12     3.12                             __mbsrtowcs_l
+ 21.38      5.26     2.14                             reduce (fast.c:48 @ 400b1e)
+  9.34      6.20     0.94 47091866    19.85    19.85  reduce (fast.c:45 @ 400afc)
+  8.54      7.05     0.86                             reduce (fast.c:47 @ 400b15)
+  6.09      7.66     0.61                             intel_check_word
+  4.35      8.10     0.44                             gcd (fast.c:22 @ 400ad8)
+  1.80      8.28     0.18                             gcd (fast.c:42 @ 400afa)
+  1.70      8.45     0.17                             reduce (fast.c:52 @ 400b76)
+  1.60      8.61     0.16                             compute_change
+  1.30      8.74     0.13                             addq (fast.c:64 @ 400c65)
+  1.10      8.85     0.11 96120579     1.14     1.14  new_rational (fast.c:58 @ 400bc1)
+  1.10      8.96     0.11                             compute_offset
+  0.90      9.05     0.09                             new_rational (fast.c:59 @ 400bcd)
+  0.70      9.12     0.07                             reduce (fast.c:49 @ 400b89)
+  0.60      9.18     0.06                             gcd (fast.c:14 @ 400a7a)
+  0.50      9.23     0.05 31637979     1.58    22.25  mulq (fast.c:68 @ 400cd6)
+  0.50      9.28     0.05                             fm_rat (fast.c:189 @ 401ba2)
+  0.50      9.33     0.05                             reduce (fast.c:49 @ 400b4f)
+  0.40      9.37     0.04                             reduce (fast.c:54 @ 400ba5)
+  0.40      9.41     0.04                             time
+  0.35      9.44     0.04                             group_sort (fast.c:108 @ 401131)
+  0.30      9.47     0.03                             addq (fast.c:65 @ 400ccf)
+  0.30      9.50     0.03  3146573     9.53     9.53  compare (fast.c:86 @ 400ed0)
+  0.30      9.53     0.03                             compare (fast.c:87 @ 400f0a)
+  0.30      9.56     0.03                             fm_rat (fast.c:141 @ 401387)
+  0.30      9.59     0.03                             fm_rat (fast.c:142 @ 40145a)
+  0.30      9.62     0.03                             fm_rat (fast.c:155 @ 401598)
+  0.30      9.65     0.03                             group_sort (fast.c:112 @ 401192)
+  0.25      9.68     0.03                             gcd (fast.c:16 @ 400ac3)
+  0.25      9.70     0.03                             group_sort (fast.c:106 @ 401112)
+  0.20      9.72     0.02 32932924     0.61     0.61  addq (fast.c:63 @ 400c2b)
+  0.20      9.74     0.02                             fm_rat (fast.c:140 @ 40142f)
+  0.20      9.76     0.02                             fm_rat (fast.c:152 @ 401544)
+  0.20      9.78     0.02                             fm_rat (fast.c:154 @ 40157c)
+  0.20      9.80     0.02                             fm_rat (fast.c:190 @ 401bef)
+  0.20      9.82     0.02                             group_sort (fast.c:106 @ 40122a)
+  0.20      9.84     0.02                             mulq (fast.c:69 @ 400d10)
+  0.20      9.86     0.02                             sign (fast.c:82 @ 400e8c)
+  0.10      9.87     0.01  5076539     1.97     8.03  divq (fast.c:76 @ 400df2)
+  0.10      9.88     0.01  3146573     3.18    74.57  swap_rows (fast.c:92 @ 400f9c)
+  0.10      9.89     0.01  1507213     6.63   143.20  fm_rat (fast.c:124 @ 40126a)
+  0.10      9.90     0.01                             compare (fast.c:88 @ 400f1a)
+  0.10      9.91     0.01                             divq (fast.c:77 @ 400e2b)
+  0.10      9.92     0.01                             fm_rat (fast.c:138 @ 401502)
+  0.10      9.93     0.01                             fm_rat (fast.c:146 @ 40152d)
+  0.10      9.94     0.01                             fm_rat (fast.c:192 @ 401c67)
+  0.10      9.95     0.01                             fm_rat (fast.c:193 @ 401c8d)
+  0.10      9.96     0.01                             group_sort (fast.c:109 @ 40116b)
+  0.10      9.97     0.01                             reduce (fast.c:51 @ 400b63)
+  0.10      9.98     0.01                             sign (fast.c:81 @ 400e77)
+  0.10      9.99     0.01                             swap_rows (fast.c:91 @ 400fb3)
+  0.10     10.00     0.01                             swap_rows (fast.c:97 @ 40101c)
+  0.10     10.01     0.01                             swap_rows (fast.c:94 @ 4010a4)
+  0.00     10.01     0.00 60303293     0.00     0.00  gcd (fast.c:10 @ 400a4e)
+  0.00     10.01     0.00      323     0.00     0.00  fm (fast.c:205 @ 401e87)
+  0.00     10.01     0.00        4     0.00     0.00  check (main.c:47 @ 4027a4)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.10% of 10.01 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     31.2    3.12    0.00                 __mbsrtowcs_l [1]
+-----------------------------------------------
+                0.28    0.00 14158942/47091866     addq (fast.c:64 @ 400c65) [8]
+                0.65    0.00 32932924/47091866     mulq (fast.c:68 @ 400cd6) [5]
+[3]      9.3    0.94    0.00 47091866         reduce (fast.c:45 @ 400afc) [3]
+-----------------------------------------------
+                0.00    0.00   44232/31637979     fm_rat (fast.c:171 @ 401a0e) [63]
+                0.00    0.01  510987/31637979     fm_rat (fast.c:165 @ 401854) [50]
+                0.00    0.02  828029/31637979     fm_rat (fast.c:158 @ 40193e) [48]
+                0.00    0.03 1383248/31637979     divq (fast.c:76 @ 400df2) [27]
+                0.01    0.19 9252016/31637979     fm_rat (fast.c:124 @ 40126a) [10]
+                0.02    0.20 9521966/31637979     group_sort (fast.c:114 @ 4011c9) [12]
+                0.02    0.21 10097501/31637979     swap_rows (fast.c:92 @ 400f9c) [9]
+[5]      7.0    0.05    0.65 31637979         mulq (fast.c:68 @ 400cd6) [5]
+                0.65    0.00 32932924/47091866     reduce (fast.c:45 @ 400afc) [3]
+-----------------------------------------------
+                                                 <spontaneous>
+[6]      6.1    0.61    0.00                 intel_check_word [6]
+-----------------------------------------------
+                0.00    0.11 1507213/3146573     fm_rat (fast.c:193 @ 401c8d) [16]
+                0.01    0.12 1639360/3146573     fm_rat (fast.c:163 @ 40174e) [17]
+[9]      2.3    0.01    0.22 3146573         swap_rows (fast.c:92 @ 400f9c) [9]
+                0.02    0.21 10097501/31637979     mulq (fast.c:68 @ 400cd6) [5]
+-----------------------------------------------
+                0.00    0.00     310/1507213     __check_realloc (malloc.c:111 @ 40265e) [65]
+                0.01    0.21 1506903/1507213     timeout (main.c:30 @ 4026b5) [11]
+[10]     2.2    0.01    0.21 1507213         fm_rat (fast.c:124 @ 40126a) [10]
+                0.01    0.19 9252016/31637979     mulq (fast.c:68 @ 400cd6) [5]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     2.2    0.00    0.22                 timeout (main.c:30 @ 4026b5) [11]
+                0.01    0.21 1506903/1507213     fm_rat (fast.c:124 @ 40126a) [10]
+-----------------------------------------------
+                                                 <spontaneous>
+[15]     1.6    0.16    0.00                 compute_change [15]
+-----------------------------------------------
+                0.00    0.00 1383248/96120579     mulq (fast.c:73 @ 400deb) [62]
+                0.00    0.00 4024337/96120579     fm_rat (fast.c:188 @ 401c3c) [61]
+                0.01    0.00 5227679/96120579     fm_rat (fast.c:155 @ 401598) [30]
+                0.01    0.00 7548015/96120579     fm_rat (fast.c:152 @ 401544) [40]
+                0.01    0.00 12071452/96120579     fm_rat (fast.c:190 @ 401bef) [34]
+                0.02    0.00 14158942/96120579     addq (fast.c:64 @ 400c65) [8]
+                0.02    0.00 18773982/96120579     mulq (fast.c:69 @ 400d10) [24]
+                0.04    0.00 32932924/96120579     addq (fast.c:65 @ 400ccf) [22]
+[18]     1.1    0.11    0.00 96120579         new_rational (fast.c:58 @ 400bc1) [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[19]     1.1    0.11    0.00                 compute_offset [19]
+-----------------------------------------------
+                0.00    0.01  845485/5076539     swap_rows (fast.c:97 @ 40101c) [49]
+                0.01    0.03 4231054/5076539     swap_rows (fast.c:96 @ 400fea) [33]
+[27]     0.4    0.01    0.03 5076539         divq (fast.c:76 @ 400df2) [27]
+                0.00    0.03 1383248/31637979     mulq (fast.c:68 @ 400cd6) [5]
+-----------------------------------------------
+                                                 <spontaneous>
+[29]     0.4    0.04    0.00                 time [29]
+-----------------------------------------------
+                0.03    0.00 3146573/3146573     group_sort (fast.c:105 @ 401108) [38]
+[35]     0.3    0.03    0.00 3146573         compare (fast.c:86 @ 400ed0) [35]
+-----------------------------------------------
+                0.00    0.00 1383248/32932924     mulq (fast.c:71 @ 400db6) [64]
+                0.00    0.00 5227679/32932924     fm_rat (fast.c:155 @ 401598) [30]
+                0.00    0.00 7548015/32932924     fm_rat (fast.c:142 @ 40145a) [32]
+                0.01    0.00 18773982/32932924     mulq (fast.c:69 @ 400d10) [24]
+[43]     0.2    0.02    0.00 32932924         addq (fast.c:63 @ 400c2b) [43]
+-----------------------------------------------
+                                                 <spontaneous>
+[58]     0.1    0.01    0.00                 sign (fast.c:81 @ 400e77) [58]
+-----------------------------------------------
+                0.00    0.00 60303293/60303293     reduce (fast.c:54 @ 400ba5) [28]
+[66]     0.0    0.00    0.00 60303293         gcd (fast.c:10 @ 400a4e) [66]
+-----------------------------------------------
+                0.00    0.00       1/323         check (main.c:99 @ 402c0e) [133]
+                0.00    0.00       1/323         check (main.c:107 @ 402d11) [139]
+                0.00    0.00       1/323         check (main.c:167 @ 40340c) [184]
+                0.00    0.00       1/323         check (main.c:168 @ 403442) [185]
+                0.00    0.00       8/323         __gconv_transform_utf8_internal [1017]
+                0.00    0.00      10/323         check (main.c:106 @ 402ceb) [138]
+                0.00    0.00     301/323         check (main.c:98 @ 402af8) [132]
+[67]     0.0    0.00    0.00     323         fm (fast.c:205 @ 401e87) [67]
+-----------------------------------------------
+                0.00    0.00       1/4           check (main.c:171 @ 40348f) [186]
+                0.00    0.00       1/4           __add_avx [897]
+                0.00    0.00       2/4           check (main.c:167 @ 40340c) [184]
+[68]     0.0    0.00    0.00       4         check (main.c:47 @ 4027a4) [68]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [1] __mbsrtowcs_l          [40] fm_rat (fast.c:152 @ 401544) [24] mulq (fast.c:69 @ 400d10)
+  [43] addq (fast.c:63 @ 400c2b) [45] fm_rat (fast.c:154 @ 40157c) [18] new_rational (fast.c:58 @ 400bc1)
+   [8] addq (fast.c:64 @ 400c65) [30] fm_rat (fast.c:155 @ 401598) [20] new_rational (fast.c:59 @ 400bcd)
+  [22] addq (fast.c:65 @ 400ccf) [25] fm_rat (fast.c:189 @ 401ba2) [3] reduce (fast.c:45 @ 400afc)
+  [68] check (main.c:47 @ 4027a4) [34] fm_rat (fast.c:190 @ 401bef) [4] reduce (fast.c:47 @ 400b15)
+  [35] compare (fast.c:86 @ 400ed0) [55] fm_rat (fast.c:192 @ 401c67) [2] reduce (fast.c:48 @ 400b1e)
+  [36] compare (fast.c:87 @ 400f0a) [16] fm_rat (fast.c:193 @ 401c8d) [26] reduce (fast.c:49 @ 400b4f)
+  [51] compare (fast.c:88 @ 400f1a) [66] gcd (fast.c:10 @ 400a4e) [57] reduce (fast.c:51 @ 400b63)
+  [15] compute_change         [23] gcd (fast.c:14 @ 400a7a) [14] reduce (fast.c:52 @ 400b76)
+  [19] compute_offset         [41] gcd (fast.c:16 @ 400ac3) [21] reduce (fast.c:49 @ 400b89)
+  [27] divq (fast.c:76 @ 400df2) [7] gcd (fast.c:22 @ 400ad8) [28] reduce (fast.c:54 @ 400ba5)
+  [52] divq (fast.c:77 @ 400e2b) [13] gcd (fast.c:42 @ 400afa) [58] sign (fast.c:81 @ 400e77)
+  [67] fm (fast.c:205 @ 401e87) [42] group_sort (fast.c:106 @ 401112) [47] sign (fast.c:82 @ 400e8c)
+  [10] fm_rat (fast.c:124 @ 40126a) [31] group_sort (fast.c:108 @ 401131) [9] swap_rows (fast.c:92 @ 400f9c)
+  [37] fm_rat (fast.c:141 @ 401387) [56] group_sort (fast.c:109 @ 40116b) [59] swap_rows (fast.c:91 @ 400fb3)
+  [44] fm_rat (fast.c:140 @ 40142f) [39] group_sort (fast.c:112 @ 401192) [49] swap_rows (fast.c:97 @ 40101c)
+  [32] fm_rat (fast.c:142 @ 40145a) [46] group_sort (fast.c:106 @ 40122a) [60] swap_rows (fast.c:94 @ 4010a4)
+  [53] fm_rat (fast.c:138 @ 401502) [6] intel_check_word  [29] time
+  [54] fm_rat (fast.c:146 @ 40152d) [5] mulq (fast.c:68 @ 400cd6)

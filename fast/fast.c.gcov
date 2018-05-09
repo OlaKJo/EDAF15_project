@@ -1,0 +1,222 @@
+        -:    0:Source:fast.c
+        -:    0:Graph:fast.gcno
+        -:    0:Data:fast.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    0:Source is newer than graph
+        -:    1:#include <stdbool.h>
+        -:    2:
+        -:    3:typedef struct
+        -:    4:{
+        -:    5:	long p;
+        -:    6:	long q;
+        -:    7:} rational;
+        -:    8:
+148284556:    9:long gcd(long u, long v)
+        -:   10:{
+        -:   11:	long rem;
+148284556:   12:
+    #####:   13:	if (a < b)
+148284556:   14:		return gcd(b, a);
+    #####:   15:
+148284556:   16:	while ((rem = a % b) != 0)
+148284556:   17:	{
+        -:   18:		a = b;
+        -:   19:		b = rem;
+867506078:   20:	}
+867506078:   21:
+        -:   22:	return labs(b);
+326176542:   23:	//int shift;
+326176542:   24:	//if (u == 0)
+326176542:   25:	//	return v;
+        -:   26:	//if (v == 0)
+867506078:   27:	//	return u;
+867506078:   28:	//shift = __builtin_ctz(u | v);
+148284556:   29:	//u >>= __builtin_ctz(u);
+        -:   30:	//do
+        -:   31:	//{
+124439685:   32:	//	v >>= __builtin_ctz(v);
+        -:   33:	//	if (u > v)
+        -:   34:	//	{
+124439685:   35:	//		unsigned long t = v;
+    44962:   36:	//		v = u;
+272679279:   37:	//		u = t;
+        -:   38:	//	}
+ 23889833:   39:	//	v = v - u;
+ 23889833:   40:	//} while (v != 0);
+        -:   41:	//return u << shift;
+124394723:   42:}
+        -:   43:
+        -:   44:rational reduce(rational r)
+233975153:   45:{
+        -:   46:	int g;
+233975153:   47:	if (r.p == 0)
+        -:   48:		return r;
+        -:   49:	while ((g = gcd(r.p, r.q)) != 1)
+ 21170613:   50:	{
+        -:   51:		r.p /= g;
+ 21170613:   52:		r.q /= g;
+        -:   53:	}
+        -:   54:	return r;
+ 51634536:   55:}
+        -:   56:
+ 51634536:   57:rational new_rational(long p, long q)
+ 51634536:   58:{
+ 51634536:   59:	return (rational){.p = (q < 0 ? p * -1 : p), .q = (q < 0 ? q * -1 : q)};
+        -:   60:}
+        -:   61:
+        -:   62:rational addq(rational f1, rational f2)
+ 30463923:   63:{
+        -:   64:	return reduce(new_rational(f1.p * f2.q + f2.p * f1.q, f1.q * f2.q));
+ 30463923:   65:}
+        -:   66:
+        -:   67:rational mulq(rational f1, rational f2)
+ 18143699:   68:{
+        -:   69:	rational r1 = reduce(new_rational(f1.p, f2.q));
+ 18143699:   70:	rational r2 = reduce(new_rational(f2.p, f1.q));
+        -:   71:	return new_rational(r1.p * r2.p, r1.q * r2.q);
+        -:   72:	//return reduce(new_rational(f1.p * f2.p, f1.q * f2.q));
+  1904441:   73:}
+        -:   74:
+  1904441:   75:rational divq(rational f1, rational f2)
+  1904441:   76:{
+        -:   77:	return mulq(f1, new_rational(f2.q, f2.p));
+        -:   78:}
+  8325257:   79:
+        -:   80:signed char sign(rational r)
+        -:   81:{
+ 34836598:   82:	return (r.p < 0 ? -1 : r.p == 0 ? 0 : 1);
+        -:   83:}
+ 26511341:   84:
+ 26511341:   85:int compare(rational r1, rational r2)
+ 26511341:   86:{
+        -:   87:	rational rat = {.p = -1, .q = 1};
+  8325257:   88:	return sign(addq(r1, mulq(r2, rat)));
+        -:   89:}
+  5484062:   90:
+        -:   91:void swap_rows(size_t rows, size_t cols, rational a[rows][cols], int index1, int index2)
+  5484062:   92:{
+  5484062:   93:	rational tmp;
+ 21723320:   94:	for (size_t i = 0; i < cols; i++)
+        -:   95:	{
+ 16239258:   96:		tmp = a[index1][i];
+ 16239258:   97:		a[index1][i] = a[index2][i];
+        -:   98:		a[index2][i] = tmp;
+  6768711:   99:	}
+  6768711:  100:}
+        -:  101:
+  9470547:  102:void group_sort(size_t rows, size_t cols, rational m[rows][cols], int *n1, int *n2)
+        -:  103:{
+  1556546:  104:	int pos = 0;
+  1556546:  105:	int zeros = rows - 1;
+  1556546:  106:	for (size_t j = 0; j <= zeros; j++)
+        -:  107:	{
+        -:  108:		signed char s = sign(m[j][cols - 2]);
+  5484062:  109:		if (s > 0)
+        -:  110:		{
+  5484062:  111:			(*n1)++;
+  5484062:  112:			swap_rows(rows, cols, m, j, pos++);
+        -:  113:		}
+  5484062:  114:		else if (s == 0)
+  5484062:  115:		{
+  5484062:  116:			(*n2)--;
+        -:  117:			swap_rows(rows, cols, m, j, zeros--);
+        -:  118:			j--;
+  5484062:  119:		}
+  5484062:  120:	}
+        -:  121:}
+  5484062:  122:
+        -:  123:bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
+        -:  124:{
+        -:  125:	// step 1
+ 20166774:  126:	int r = cols - 1;
+        -:  127:	int r_prim = r - 1;
+ 30463923:  128:	int s = rows;
+ 15781211:  129:
+ 14682712:  130:	// step 2
+        -:  131:	int n1 = 0;
+        -:  132:	int n2 = rows;
+        -:  133:
+  5484062:  134:	group_sort(rows, cols, m, &n1, &n2);
+  5284496:  135:
+        -:  136:	// step 3
+        -:  137:	// POTENTIALLY MAKE THIS SHORTER, REMOVE OUTER LOOP
+        -:  138:	for (int i = 0; i < n2; i++)
+        -:  139:	{
+  5284496:  140:		for (int j = 0; j < r_prim; j++)
+  5284496:  141:			m[i][j] = divq(m[i][j], m[i][r_prim]);
+  2442840:  142:		m[i][r] = divq(m[i][r], m[i][r_prim]);
+  2841656:  143:	}
+  2841656:  144:
+  2841656:  145:	// more variables needs to be eliminated
+  5622787:  146:	if (r > 1)
+ 10604201:  147:	{
+        -:  148:		// step 4
+ 19266172:  149:		// n2 > n1 exist negative coeffs
+        -:  150:
+ 11443102:  151:		// goto step 6 and 7
+        -:  152:		int s_prim = s - n2 + n1 * (n2 - n1);
+  7823070:  153:		if (s_prim == 0)
+  7823070:  154:			return true;
+        -:  155:		rational m_prim[s_prim][r];
+        -:  156:		int currentRow = 0;
+  4398202:  157:		rational rat = {.p = -1, .q = 1};
+        -:  158:		for (int i = 0; i < n1; i++)
+  4669637:  159:			for (int j = n1; j < n2; j++)
+  3113091:  160:			{
+        -:  161:				for (int l = 0; l < r_prim; l++)
+  1556546:  162:				{
+  1556546:  163:					m_prim[currentRow][l] = addq(mulq(m[j][l], rat), m[i][l]);
+        -:  164:				}
+        -:  165:				m_prim[currentRow][r_prim] = addq(m[i][r], mulq(rat, m[j][r]));
+  2841656:  166:				currentRow++;
+        -:  167:			}
+        -:  168:
+        -:  169:		for (int i = n2; i < s; i++)
+        -:  170:		{
+   199566:  171:			for (int j = 0; j < r_prim; j++)
+   135311:  172:				m_prim[currentRow][j] = m[i][j];
+        -:  173:
+    64255:  174:			m_prim[currentRow][r_prim] = m[i][r];
+    64255:  175:			currentRow++;
+   766436:  176:		}
+   702181:  177:
+   152272:  178:		return fm_rat(s_prim, r, m_prim);
+        -:  179:	}
+  1202260:  180:	else
+  1138005:  181:	{
+   160242:  182:
+        -:  183:		if ((s - n2 + n1 * (n2 - n1)) == 0)
+    64255:  184:			return true;
+    #####:  185:		//step 5
+    #####:  186:		rational max = m[n1][r];
+        -:  187:		rational min = m[0][r];
+    64255:  188:		for (int i = 1; i < n1; i++)
+        -:  189:			if (compare(m[i][r], min) == -1)
+        -:  190:				min = m[i][r];
+        -:  191:
+  2642406:  192:		for (int i = n1 + 1; i < n2; i++)
+  2642406:  193:			if (compare(m[i][r], max) == 1)
+  2642406:  194:				max = m[i][r];
+        -:  195:
+  9502048:  196:		for (int i = n2; i < s; i++)
+        -:  197:			if (sign(m[i][r]) == -1)
+ 27437009:  198:				return false;
+ 20577367:  199:
+  6859642:  200:		return compare(min, max) == 1;
+        -:  201:	}
+        -:  202:}
+  2642406:  203:
+        -:  204:bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows])
+        -:  205:{
+        -:  206:	rational m[rows][cols + 1];
+        -:  207:
+        -:  208:	for (size_t j = 0; j < rows; j++)
+        -:  209:	{
+        -:  210:		for (size_t i = 0; i < cols; i++)
+        -:  211:			m[j][i] = new_rational(a[j][i], 1);
+        -:  212:		m[j][cols] = new_rational(c[j], 1);
+        -:  213:	}
+        -:  214:
+        -:  215:	return fm_rat(rows, cols + 1, m);
+        -:  216:}
