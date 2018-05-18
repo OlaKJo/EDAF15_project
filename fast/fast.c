@@ -9,7 +9,7 @@ typedef struct
 	intmax_t q;
 } rational;
 
-int gcd(uintmax_t u, uintmax_t v)
+uintmax_t gcd(uintmax_t u, uintmax_t v)
 {
 	unsigned char shift;
 	shift = __builtin_ctz(u | v);
@@ -30,20 +30,24 @@ int gcd(uintmax_t u, uintmax_t v)
 
 rational reduce(rational r)
 {
-	intmax_t lim = 600000;
+	uintmax_t lim = 1100000;
 	if (imaxabs(r.p) < lim && imaxabs(r.q) < lim)
 	{
 		return r;
 	}
 
-	int g;
-	if (r.p == 0)
+	intmax_t g;
+	if (r.p == 0) {
 		return r;
-	while ((g = gcd(imaxabs(r.p), r.q)) != 1)
-	{
-		r.p /= g;
-		r.q /= g;
 	}
+	//while ((g = gcd(imaxabs(r.p), r.q)) != 1)
+	//{
+	//	r.p /= g;
+	//	r.q /= g;
+	//}
+	g = gcd(imaxabs(r.p), r.q);
+	r.p /= g;
+	r.q /= g;
 	return r;
 }
 
@@ -60,15 +64,15 @@ rational addq(rational f1, rational f2)
 
 rational mulq(rational f1, rational f2)
 {
-	rational r1 = reduce(new_rational(f1.p, f2.q));
-	rational r2 = reduce(new_rational(f2.p, f1.q));
-	return new_rational(r1.p * r2.p, r1.q * r2.q);
-	//return reduce(new_rational(f1.p * f2.p, f1.q * f2.q));
+	//rational r1 = reduce(new_rational(f1.p, f2.q));
+	//rational r2 = reduce(new_rational(f2.p, f1.q));
+	//return new_rational(r1.p * r2.p, r1.q * r2.q);
+	return new_rational(f1.p * f2.p, f1.q * f2.q);
 }
 
 rational divq(rational f1, rational f2)
 {
-	//return mulq(f1, new_rational(f2.q, f2.p));
+	//return mulq(f1, new_rational(f2.q, f2.p))
 	return reduce(new_rational(f1.p * f2.q, f1.q * f2.p));
 }
 
@@ -150,7 +154,6 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 	group_sort(rows, cols, m, &n1, &n2);
 
 	// step 3
-	// POTENTIALLY MAKE THIS SHORTER, REMOVE OUTER LOOP
 	for (i = 0; i < n2; i++)
 	{
 		for (j = 0; j < r_prim; j++)

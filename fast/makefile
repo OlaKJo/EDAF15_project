@@ -2,6 +2,8 @@ CC	= gcc
 #CFLAGS	= -m32 -g -Wall -Wextra -std=c11 -mcpu=970 -mtune=970 -Wno-format -Wno-parentheses
 #CFLAGS	= -m32 -O3 -Wall -Wextra -std=c11 -mcpu=970 -mtune=970 -Wno-format -Wno-parentheses
 CFLAGS	= -g -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
+#CFLAGS	= -pg -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
+#CFLAGS	= -g -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses -fprofile-arcs -ftest-coverage
 #CFLAGS	= -O3 -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
 OUT	= fm
 NOTE	= note

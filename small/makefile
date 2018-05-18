@@ -1,6 +1,6 @@
 CC	= gcc
 #CFLAGS	= -m32 -Os -Wall -Wextra -std=c11 -mcpu=970 -mtune=970 -Wno-format -Wno-parentheses
-CFLAGS	= -g -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
+CFLAGS	= -Os -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
 #CFLAGS	= -g -Os -Wall -Wextra -std=c11 -Wno-format -Wno-parentheses
 OUT	= fm
 NOTE	= note

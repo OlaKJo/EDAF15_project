@@ -1,14 +1,17 @@
+#include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <inttypes.h>
 
 typedef struct
 {
-	long p;
-	long q;
+	intmax_t p;
+	intmax_t q;
 } rational;
 
-long gcd(long a, long b)
+intmax_t gcd(uintmax_t a, uintmax_t b)
 {
-	long rem;
+	intmax_t rem;
 
 	if (a < b)
 		return gcd(b, a);
@@ -19,15 +22,15 @@ long gcd(long a, long b)
 		b = rem;
 	}
 
-	return labs(b);
+	return b;
 }
 
 rational reduce(rational r)
 {
-	int g;
+	intmax_t g;
 	if (r.p == 0)
 		return r;
-	while ((g = gcd(r.p, r.q)) != 1)
+	while ((g = gcd(imaxabs(r.p), r.q)) != 1)
 	{
 		r.p /= g;
 		r.q /= g;
@@ -35,7 +38,7 @@ rational reduce(rational r)
 	return r;
 }
 
-rational new_rational(long p, long q)
+rational new_rational(intmax_t p, intmax_t q)
 {
 	return (rational){.p = (q < 0 ? p * -1 : p), .q = (q < 0 ? q * -1 : q)};
 }
@@ -80,7 +83,7 @@ void swap_rows(size_t rows, size_t cols, rational a[rows][cols], int index1, int
 void group_sort(size_t rows, size_t cols, rational m[rows][cols], int *n1, int *n2)
 {
 	int pos = 0;
-	int zeros = rows - 1;
+	size_t zeros = rows - 1;
 	for (size_t j = 0; j <= zeros; j++)
 	{
 		signed char s = sign(m[j][cols - 2]);
@@ -100,6 +103,10 @@ void group_sort(size_t rows, size_t cols, rational m[rows][cols], int *n1, int *
 
 bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 {
+	int i;
+	int j;
+	int l;
+	
 	// step 1
 	int r = cols - 1;
 	int r_prim = r - 1;
@@ -113,9 +120,9 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 
 	// step 3
 	// POTENTIALLY MAKE THIS SHORTER, REMOVE OUTER LOOP
-	for (int i = 0; i < n2; i++)
+	for (i = 0; i < n2; i++)
 	{
-		for (int j = 0; j < r_prim; j++)
+		for (j = 0; j < r_prim; j++)
 			m[i][j] = divq(m[i][j], m[i][r_prim]);
 		m[i][r] = divq(m[i][r], m[i][r_prim]);
 	}
@@ -133,10 +140,10 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 		rational m_prim[s_prim][r];
 		int currentRow = 0;
 		rational rat = {.p = -1, .q = 1};
-		for (int i = 0; i < n1; i++)
-			for (int j = n1; j < n2; j++)
+		for (i = 0; i < n1; i++)
+			for (j = n1; j < n2; j++)
 			{
-				for (int l = 0; l < r_prim; l++)
+				for (l = 0; l < r_prim; l++)
 				{
 					m_prim[currentRow][l] = addq(mulq(m[j][l], rat), m[i][l]);
 				}
@@ -144,9 +151,9 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 				currentRow++;
 			}
 
-		for (int i = n2; i < s; i++)
+		for (i = n2; i < s; i++)
 		{
-			for (int j = 0; j < r_prim; j++)
+			for (j = 0; j < r_prim; j++)
 				m_prim[currentRow][j] = m[i][j];
 
 			m_prim[currentRow][r_prim] = m[i][r];
@@ -163,15 +170,15 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 		//step 5
 		rational max = m[n1][r];
 		rational min = m[0][r];
-		for (int i = 1; i < n1; i++)
+		for (i = 1; i < n1; i++)
 			if (compare(m[i][r], min) == -1)
 				min = m[i][r];
 
-		for (int i = n1 + 1; i < n2; i++)
+		for (i = n1 + 1; i < n2; i++)
 			if (compare(m[i][r], max) == 1)
 				max = m[i][r];
 
-		for (int i = n2; i < s; i++)
+		for (i = n2; i < s; i++)
 			if (sign(m[i][r]) == -1)
 				return false;
 
