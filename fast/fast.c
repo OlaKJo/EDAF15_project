@@ -14,6 +14,7 @@ uintmax_t gcd(uintmax_t u, uintmax_t v)
 	unsigned char shift;
 	shift = __builtin_ctz(u | v);
 	u >>= __builtin_ctz(u);
+	int counter = 0;
 	do
 	{
 		v >>= __builtin_ctz(v);
@@ -24,13 +25,14 @@ uintmax_t gcd(uintmax_t u, uintmax_t v)
 			u = t;
 		}
 		v = v - u;
-	} while (v != 0);
+	} while (v != 0 && counter++ < 2);
+	//} while (v != 0);
 	return u << shift;
 }
 
 rational reduce(rational r)
 {
-	uintmax_t lim = 1100000;
+	intmax_t lim = 1100000;
 	if (imaxabs(r.p) < lim && imaxabs(r.q) < lim)
 	{
 		return r;
@@ -120,7 +122,8 @@ void group_sort(size_t rows, size_t cols, rational m[rows][cols], size_t *n1, si
 
 bool all_pos(size_t rows, size_t cols, rational m[rows][cols])
 {
-	for (int i = 0; i < rows; i++)
+	size_t i = 0;
+	for (i = 0; i < rows; i++)
 	{
 		if (sign(m[i][cols - 1]) != 1)
 		{
