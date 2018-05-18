@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 typedef struct
 {
@@ -93,10 +94,10 @@ void swap_rows(size_t rows, size_t cols, rational a[rows][cols], int index1, int
 	}
 }
 
-void group_sort(size_t rows, size_t cols, rational m[rows][cols], char *n1, char *n2)
+void group_sort(size_t rows, size_t cols, rational m[rows][cols], size_t *n1, size_t *n2)
 {
 	char pos = 0;
-	int zeros = rows - 1;
+	size_t zeros = rows - 1;
 	for (size_t j = 0; j <= zeros; j++)
 	{
 		signed char s = sign(m[j][cols - 2]);
@@ -113,21 +114,38 @@ void group_sort(size_t rows, size_t cols, rational m[rows][cols], char *n1, char
 	}
 }
 
+bool all_pos(size_t rows, size_t cols, rational m[rows][cols])
+{
+	for (int i = 0; i < rows; i++)
+	{
+		if (sign(m[i][cols - 1]) != 1)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 {
 	// loop vars
-	char i;
-	char j;
-	char l;
+	size_t i;
+	size_t j;
+	size_t l;
 
 	// step 1
-	char r = cols - 1;
-	char r_prim = r - 1;
-	char s = rows;
+	size_t r = cols - 1;
+	size_t r_prim = r - 1;
+	size_t s = rows;
 
 	// step 2
-	char n1 = 0;
-	char n2 = rows;
+	size_t n1 = 0;
+	size_t n2 = rows;
+
+	if (all_pos(rows, cols, m))
+	{
+		return true;
+	}
 
 	group_sort(rows, cols, m, &n1, &n2);
 
@@ -151,7 +169,7 @@ bool fm_rat(size_t rows, size_t cols, rational m[rows][cols])
 		if (s_prim == 0)
 			return true;
 		rational m_prim[s_prim][r];
-		char currentRow = 0;
+		size_t currentRow = 0;
 		rational rat = {.p = -1, .q = 1};
 		for (i = 0; i < n1; i++)
 			for (j = n1; j < n2; j++)
